@@ -2,6 +2,31 @@
 #CICTP01
 #5 August 2025
 
+#Main Menu
+def displaymainmenu():
+    print('\n---------------- Welcome to Sundrop Caves! ----------------')
+    print('You spent all your money to get the deed to a mine, a small backpack, a simple pickaxe and a magical portal stone.')
+    print('How quickly can you get the 500 GP you need to retire and live happily ever after? ')
+    print('-----------------------------------------------------------')
+    print('----Main Menu ---')
+    print('(N)ew game')
+    print('(L)oad saved game')
+    print('(Q)uit')
+    print('------------------')
+    while True:
+        choice=input('Your choice?').strip().lower()
+        if choice in['n','l','q']:
+            return choice
+        print('Invalid choice, Please enter N,L or Q.')
+playerschoice=displaymainmenu()
+
+#New game
+def newgame():
+    name=input('Greetings, miner! What is your name?')
+    print(f'Pleased to meet you, {name}. Welcome to Sundrop town!')
+    
+
+
 from random import randint
 
 player = {}
