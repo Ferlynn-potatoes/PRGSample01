@@ -2,6 +2,8 @@
 #CICTP01
 #5 August 2025
 
+from random import randint
+
 #Main Menu
 def displaymainmenu():
     print('\n---------------- Welcome to Sundrop Caves! ----------------')
@@ -18,16 +20,11 @@ def displaymainmenu():
         if choice in['n','l','q']:
             return choice
         print('Invalid choice, Please enter N,L or Q.')
-playerschoice=displaymainmenu()
 
-#New game
-def newgame():
-    name=input('Greetings, miner! What is your name?')
-    print(f'Pleased to meet you, {name}. Welcome to Sundrop town!')
     
 
 
-from random import randint
+
 
 player = {}
 game_map = []
