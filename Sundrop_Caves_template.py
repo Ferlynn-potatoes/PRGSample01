@@ -4,7 +4,69 @@
 
 from random import randint
 
-#Main Menu
+#New game
+def newgame():
+    name=input('Greetings, miner! What is your name?')
+    print(f'Pleased to meet you, {name}. Welcome to Sundrop town!')
+    player['name']=name
+    player['day']=1
+    player['GP']=0
+    player['pickaxe_lvl']=1
+    player['backpack_capacity']=8
+    initialize_game(game_map, fog, player)
+    while True:
+        print('DAY ',player['day'])
+        print('----- Sundrop Town -----')
+        print('(B)uy stuff\nSee Player (I)nformation\nSee Mine (M)ap\n(E)nter mine\nSa(V)e game\n(Q)uit to main menu')
+        print('------------------------')
+        choice=input('Your choice?').strip().lower()
+        if choice=='b':
+            print('----------------------- Shop Menu -------------------------')
+            print('(P)ickaxe upgrade to Level 2 to mine silver ore for 50 GP \n(B)ackpack upgrade to carry 12 items for 20 GP \n(L)eave shop')
+            print('-----------------------------------------------------------')
+            print('GP: ',player['GP'])
+            print('-----------------------------------------------------------')
+            shopchoice=input('Your choice?').strip().lower()
+            if shopchoice=='p':
+                if player['pickaxe_lvl']==1 and player['GP']>=50:
+                    player['GP']-=50
+                    player['pickaxe_lvl']=2
+                    print('Pickaxe level upgraded to 2!')
+                elif player['pickaxe_lvl']>1:
+                    print('Pickaxe level have already been upgraded')
+                else:
+                    print('Not enough GP')
+            elif shopchoice=='b':
+                price=player['backpack_capacity']*2
+                if player['GP']>=price:
+                    player['GP']-=price
+                    player['backpack_capacity']+=2
+                    print('Congratulations! you can now hold', player['backpack_capacity'] ,'items!')
+                else:
+                    print('Not enough GP')
+            elif shopchoice=='l':
+                break
+        elif choice=='i':
+            show_information(player)
+        elif choice=='m':
+            draw_map(game_map, fog, player)
+        elif choice=='e':
+            player['day']+=1
+            print('---------------------------------------------------')
+            print('\nDay ',player['day'])
+            print('---------------------------------------------------')
+        elif choice=='v':
+            save_game(game_map, fog, player)
+        elif choice=='q':
+            print('Returning to main menu')
+            break
+        else:
+            print('Invalid choice, please enter again')
+
+
+
+
+#Main menu
 def displaymainmenu():
     print('\n---------------- Welcome to Sundrop Caves! ----------------')
     print('You spent all your money to get the deed to a mine, a small backpack, a simple pickaxe and a magical portal stone.')
@@ -20,15 +82,19 @@ def displaymainmenu():
         if choice in['n','l','q']:
             return choice
         print('Invalid choice, Please enter N,L or Q.')
-
-    
-
-
-
-
+        
 player = {}
 game_map = []
 fog = []
+while True:
+    playerschoice=displaymainmenu()
+    if playerschoice=='n':
+        newgame()
+    elif playerschoice=='l':
+        load_game(game_map,fog,player)
+    elif playerschoice=='q':
+        print('Thanks for playing, bye!')
+        break
 
 MAP_WIDTH = 0
 MAP_HEIGHT = 0
