@@ -111,21 +111,33 @@ def draw_map(game_map, fog, player):
         print(row)
     print('+------------------------------+')
 
+mineral_required_level = {'copper': 1,'silver': 2,'gold': 3}
+
 #Player's movement
 def move_player(action, player):
+    temp_x,temp_y=player['x'],player['y']
     if action=='w' and player['y']>0:
-        player['y']-=1
+        temp_y-=1
         return True
     elif action=='s' and player['y']<MAP_HEIGHT-1:
-        player['y']+=1
+        temp_y+=1
         return True
     elif action=='a' and player['x']>0:
-        player['x']-=1
+        temp_x-=1
         return True
     elif action=='d' and player['x']<MAP_WIDTH-1:
-        player['x']+=1
-        return True
-    return False
+        temp_x+=1
+    else:
+        return False
+    tile=game_map[temp_y][temp_x]
+    if tile in mineral_names:
+        minerals=mineral_names[tile]
+        required_lvl=minerals.index(minerals)+1
+        if player['pickaxe_lvl']<required_lvl:
+            print(f'Your pickaxe is too weak to mine {minerals}, you cannot step there.')
+            return False
+    player['x'],player['y']=temp_x,temp_y
+    return True
 
 # This function draws the 3x3 viewport
 def draw_view(game_map, fog, player):
@@ -283,14 +295,22 @@ def newgame():
             print('-----------------------------------------------------------')
             shopchoice=input('Your choice?').strip().lower()
             if shopchoice=='p':
-                if player['pickaxe_lvl']==1 and player['GP']>=50:
-                    player['GP']-=50
-                    player['pickaxe_lvl']=2
-                    print('Pickaxe level upgraded to 2!')
-                elif player['pickaxe_lvl']>1:
-                    print('Pickaxe level have already been upgraded')
+                if player['pickaxe_lvl']==1:
+                    if player['GP']>=50:
+                        player['GP']-=50
+                        player['pickaxe_lvl']=2
+                        print('Congratulations! You can now mine silver!')
+                    else:
+                        print('You do not have enough GP to upgrade to Level 2')
+                elif player['pickaxe_lvl']==2:
+                    if player['GP']>=150:
+                        player['GP']-=150
+                        player['pickaxe_lvl']=3
+                        print('Congratulations! You can now mine gold!')
+                    else:
+                        print('You do not have enough GP to upgrade to Level 3')
                 else:
-                    print('Not enough GP')
+                    print('Your pickaxe level is already at the max level!')
             elif shopchoice=='b':
                 price=player['backpack_capacity']*2
                 if player['GP']>=price:
@@ -362,20 +382,7 @@ def newgame():
             print('Returning to main menu')
             break
         else:
-            print('Invalid choice, please enter again')
-
-def show_town_menu():
-    print()
-    # TODO: Show Day
-    print("----- Sundrop Town -----")
-    print("(B)uy stuff")
-    print("See Player (I)nformation")
-    print("See Mine (M)ap")
-    print("(E)nter mine")
-    print("Sa(V)e game")
-    print("(Q)uit to main menu")
-    print("------------------------")
-            
+            print('Invalid choice, please enter again')       
 
 #--------------------------- MAIN GAME ---------------------------
 def displaymainmenu():
@@ -408,7 +415,5 @@ while True:
     elif playerschoice=='q':
         print('Thanks for playing, bye!')
         break
-
-# TODO: The game!
     
     
